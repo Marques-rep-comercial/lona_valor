@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Lona Tensionada Iluminada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom scrollbar for project list */
+        #projectItemsList::-webkit-scrollbar {
+            width: 8px;
+        }
+        #projectItemsList::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        #projectItemsList::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        #projectItemsList::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+
+    <div class="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+        
+        <!-- Header -->
+        <div class="bg-blue-700 p-8 text-center text-white">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Calculadora de Lona Tensionada</h1>
+            <p class="text-blue-100 mt-3 max-w-2xl mx-auto text-sm md:text-base">Calcule com precisão os materiais para cada lona (perfil, silicone, LED e fonte) e consolide tudo em um projeto unificado com exportação para PDF.</p>
+        </div>
+
+        <div class="p-6 md:p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                <!-- Left Column: Input Section -->
+                <div class="lg:col-span-7 space-y-8">
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <div class="flex items-center justify-between border-b border-gray-200 pb-3 mb-5">
+                            <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                                Dimensões e Forma
+                            </h2>
+                        </div>
+                        
+                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-md">
+                            <p class="text-amber-800 text-xs md:text-sm font-medium">
+                                <strong>Atenção:</strong> Respeite as medidas de altura máxima das lonas (1.80m, 2.80m e 5.80m), todas fornecidas em rolos de 100 metros lineares.
+                            </p>
+                        </div>
+
+                        <!-- Shape Selector (Enhanced Visuals) -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">Tipo de Forma</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <!-- Rectangle -->
+                                <label class="cursor-pointer relative">
+                                    <input type="radio" name="shape" value="rectangle" class="peer sr-only" checked>
+                                    <div class="h-full p-3 border-2 border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-blue-600 peer-checked:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 text-center">
+                                        <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-500 peer-checked:text-blue-600"><rect x="2" y="2" width="28" height="20" rx="2"/></svg>
+                                        <span class="text-xs font-medium text-gray-700 peer-checked:text-blue-700">Retângulo</span>
+                                    </div>
+                                </label>
+                                <!-- Circle -->
+                                <label class="cursor-pointer relative">
+                                    <input type="radio" name="shape" value="circle" class="peer sr-only">
+                                    <div class="h-full p-3 border-2 border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-blue-600 peer-checked:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 text-center">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-500 peer-checked:text-blue-600"><circle cx="12" cy="12" r="10"/></svg>
+                                        <span class="text-xs font-medium text-gray-700 peer-checked:text-blue-700">Círculo</span>
+                                    </div>
+                                </label>
+                                <!-- Ellipse -->
+                                <label class="cursor-pointer relative">
+                                    <input type="radio" name="shape" value="ellipse" class="peer sr-only">
+                                    <div class="h-full p-3 border-2 border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-blue-600 peer-checked:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 text-center">
+                                        <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-500 peer-checked:text-blue-600"><ellipse cx="16" cy="12" rx="14" ry="8"/></svg>
+                                        <span class="text-xs font-medium text-gray-700 peer-checked:text-blue-700">Elipse</span>
+                                    </div>
+                                </label>
+                                <!-- Custom -->
+                                <label class="cursor-pointer relative">
+                                    <input type="radio" name="shape" value="custom" class="peer sr-only">
+                                    <div class="h-full p-3 border-2 border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-blue-600 peer-checked:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 text-center">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-500 peer-checked:text-blue-600"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+                                        <span class="text-xs font-medium text-gray-700 peer-checked:text-blue-700">Irregular</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Profile Selector -->
+                        <div class="mb-6">
+                            <label for="profileType" class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Perfil de Alumínio</label>
+                            <div class="relative">
+                                <select id="profileType" class="appearance-none w-full p-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow text-gray-700 font-medium">
+                                    <option value="perfilH_embutir">Perfil "h" Tradicional (Embutir) - Barras 2.5m - R$ 36,08</option>
+                                    <option value="perfilH_flexivel">Perfil "H" Flexível Nylon - Barras 2.5m - R$ 36,08</option>
+                                    <option value="perfilE_sobrepor">Perfil "E" de Sobrepor - Barras 3.0m - R$ 177,54</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dynamic Dimension Inputs -->
+                        <div id="dimensionsInputs" class="space-y-4 p-4 bg-white border border-gray-100 rounded-lg shadow-inner">
+                            <!-- Rectangle Inputs -->
+                            <div id="rectangleInputs" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="comprimento" class="block text-sm font-medium text-gray-600 mb-1">Comprimento (m)</label>
+                                    <input type="number" id="comprimento" value="2.5" min="0" step="0.1" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                                </div>
+                                <div>
+                                    <label for="altura" class="block text-sm font-medium text-gray-600 mb-1">Altura (m)</label>
+                                    <input type="number" id="altura" value="1.5" min="0" step="0.1" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                                </div>
+                            </div>
+                            
+                            <!-- Circle Input -->
+                            <div id="circleInputs" class="hidden">
+                                <div>
+                                    <label for="diametro" class="block text-sm font-medium text-gray-600 mb-1">Diâmetro Total (m)</label>
+                                    <input type="number" id="diametro" value="2.0" min="0" step="0.1" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                                </div>
+                            </div>
+                            
+                             <!-- Ellipse Inputs -->
+                            <div id="ellipseInputs" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="eixoMaior" class="block text-sm font-medium text-gray-600 mb-1">Eixo Maior (m)</label>
+                                    <input type="number" id="eixoMaior" value="3.0" min="0" step="0.1" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                                </div>
+                                <div>
+                                    <label for="eixoMenor" class="block text-sm font-medium text-gray-600 mb-1">Eixo Menor (m)</label>
+                                    <input type="number" id="eixoMenor" value="2.0" min="0" step="0.1" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                                </div>
+                            </div>
+
+                            <!-- Custom Shape Inputs -->
+                            <div id="customInputs" class="hidden space-y-4">
+                                <div class="bg-blue-50 p-3 rounded text-sm text-blue-800 mb-2">
+                                    Adicione a medida de cada lado do polígono para calcular o perímetro.
+                                </div>
+                                <div id="customSidesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                     <!-- Dynamic side inputs injected here -->
+                                </div>
+                                <button id="addSideBtn" type="button" class="w-full flex justify-center items-center gap-2 text-sm bg-white border border-dashed border-gray-400 text-gray-600 font-semibold py-2 px-4 rounded-md hover:bg-gray-50 hover:text-blue-600 hover:border-blue-400 transition-colors">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Adicionar Lado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Output Section -->
+                <div class="lg:col-span-5 flex flex-col h-full">
+                    <div class="bg-white border-2 border-blue-500 rounded-xl shadow-lg flex-grow flex flex-col relative overflow-hidden">
+                        
+                        <!-- Header Graphic -->
+                        <div class="bg-blue-500 text-white p-4 text-center">
+                            <h2 class="text-xl font-bold flex justify-center items-center gap-2">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                Quantitativos Desta Lona
+                            </h2>
+                        </div>
+
+                        <div class="p-5 flex-grow flex flex-col">
+                            <div id="results" class="grid grid-cols-2 gap-3 mb-6">
+                                <!-- Results injected here -->
+                            </div>
+                            
+                            <div class="mt-auto">
+                                <button id="addToProjectBtn" class="w-full bg-blue-600 text-white font-bold text-lg py-4 px-4 rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg focus:ring-4 focus:ring-blue-300 transform transition-all active:scale-[0.98] flex justify-center items-center gap-2">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Adicionar Lona ao Projeto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Project List Section -->
+        <div id="projectSection" class="border-t border-gray-200 bg-gray-50 p-6 md:p-8 hidden">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-gray-800">Resumo do Projeto</h2>
+                    <p class="text-sm text-gray-500">Lista de todas as lonas calculadas para este orçamento.</p>
+                </div>
+                <button id="clearProjectBtn" class="bg-white border border-red-200 text-red-600 font-semibold py-2 px-4 rounded-lg hover:bg-red-50 transition-colors text-sm flex items-center gap-2 shadow-sm">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    Limpar Projeto
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Items List -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+                    <div class="bg-gray-100 p-3 border-b border-gray-200 font-semibold text-gray-700 text-sm">
+                        Itens Adicionados (<span id="itemCount">0</span>)
+                    </div>
+                    <div id="projectItemsList" class="p-3 space-y-2 max-h-80 overflow-y-auto">
+                        <!-- Project items listed here -->
+                    </div>
+                </div>
+
+                <!-- Totals & Export -->
+                <div class="bg-emerald-600 text-white rounded-xl shadow-md p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                            Total Geral de Materiais
+                        </h3>
+                        <div id="projectTotals" class="space-y-3 bg-emerald-700 bg-opacity-40 p-4 rounded-lg">
+                            <!-- Project totals displayed here -->
+                        </div>
+                    </div>
+                    
+                    <button id="downloadPdfBtn" class="w-full mt-6 bg-white text-emerald-700 font-bold py-3 px-4 rounded-lg shadow hover:bg-emerald-50 focus:ring-4 focus:ring-emerald-300 transition-all flex justify-center items-center gap-2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Baixar PDF do Projeto Completo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-100 p-4 text-center border-t border-gray-200">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Representante Comercial</p>
+            <p class="text-sm font-semibold text-gray-700">Marcio Marques <span class="mx-2 text-gray-400">|</span> <a href="tel:+5581994645392" class="text-blue-600 hover:underline">(81) 9.9464-5392</a></p>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        // --- CATALOGO DE PRODUTOS ---
+        const CATALOG = {
+            lona180: { code: '416492', title: 'Tela Tensionada 1,80m', desc: 'TELA TENSIONADA COM 1,80m DE ALTURA E 100m DE COMPRIMENTO', unit: 'Metro', price: 226.19, brand: 'CITYLAMP', img: 'https://i.imgur.com/0Fr5dj5.png' },
+            lona280: { code: '41650', title: 'Tela Tensionada 2,80m', desc: 'TELA TENSIONADA COM 2,80m DE ALTURA E 100m DE COMPRIMENTO', unit: 'Metro', price: 351.85, brand: 'CITYLAMP', img: 'https://i.imgur.com/0Fr5dj5.png' },
+            lona580: { code: '41651', title: 'Tela Tensionada 5,80m', desc: 'TELA TENSIONADA COM 5,80m DE ALTURA E 100m DE COMPRIMENTO', unit: 'Metro', price: 728.83, brand: 'CITYLAMP', img: 'https://i.imgur.com/0Fr5dj5.png' },
+            silicone: { code: '41550', title: 'Silicone Master', desc: 'SILICONA VENDA POR 1 METRO MASTER1*300M', unit: 'Metro', price: 9.06, brand: 'CITYLAMP', img: 'https://i.imgur.com/oB396RI.png' },
+            perfilH_embutir: { code: '41551', title: 'Perfil "h" (Embutir)', desc: 'PERFIL DE ALUMÍNIO FIXAÇÃO PARA LONA TENSIONADA 30mm x 2,50m, FORMATO "h" (EMBUTIR)', unit: 'Barra', price: 36.08, brand: 'CITYLAMP', img: 'https://i.imgur.com/uhowhMq.png', length: 2.5 },
+            perfilE_sobrepor: { code: '41553', title: 'Perfil "E" (Sobrepor)', desc: 'PERFIL DE ALUMÍNIO FIXAÇÃO PARA LONA TENSIONADA 3,00m, FORMATO "E" (SOBREPOR)', unit: 'Barra', price: 177.54, brand: 'CITYLAMP', img: 'https://i.imgur.com/xFleuc1.png', length: 3.0 },
+            perfilH_flexivel: { code: '41554', title: 'Perfil "H" Flexível', desc: 'PERFIL DE NYLON FIXAÇÃO PARA LONA TENSIONADA 2,5M, FORMATO "H" (FLEXIVEL)', unit: 'Barra', price: 36.08, brand: 'CITYLAMP', img: 'https://i.imgur.com/12bNd7u.png', length: 2.5 }
+        };
+
+        // --- DOM Element References ---
+        const comprimentoInput = document.getElementById('comprimento');
+        const alturaInput = document.getElementById('altura');
+        const diametroInput = document.getElementById('diametro');
+        const eixoMaiorInput = document.getElementById('eixoMaior');
+        const eixoMenorInput = document.getElementById('eixoMenor');
+        const customSidesContainer = document.getElementById('customSidesContainer');
+        const addSideBtn = document.getElementById('addSideBtn');
+        const resultsDiv = document.getElementById('results');
+        const shapeRadios = document.querySelectorAll('input[name="shape"]');
+        const profileTypeSelect = document.getElementById('profileType');
+        
+        const rectangleInputsDiv = document.getElementById('rectangleInputs');
+        const circleInputsDiv = document.getElementById('circleInputs');
+        const ellipseInputsDiv = document.getElementById('ellipseInputs');
+        const customInputsDiv = document.getElementById('customInputs');
+        
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const addToProjectBtn = document.getElementById('addToProjectBtn');
+        const clearProjectBtn = document.getElementById('clearProjectBtn');
+        const projectSection = document.getElementById('projectSection');
+        const projectItemsList = document.getElementById('projectItemsList');
+        const projectTotals = document.getElementById('projectTotals');
+        const itemCountSpan = document.getElementById('itemCount');
+        const toastContainer = document.getElementById('toastContainer');
+
+        let lastCalculatedResults = {};
+        let projectItems = [];
+
+        // --- Helper Functions ---
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'bg-gray-800 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-3 transform transition-all duration-300 translate-y-10 opacity-0';
+            toast.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span class="font-medium text-sm">${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Animate in
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            });
+            
+            // Animate out and remove
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function handleShapeChange() {
+            const selectedShape = document.querySelector('input[name="shape"]:checked').value;
+            rectangleInputsDiv.classList.add('hidden');
+            circleInputsDiv.classList.add('hidden');
+            ellipseInputsDiv.classList.add('hidden');
+            customInputsDiv.classList.add('hidden');
+
+            if (selectedShape === 'rectangle') rectangleInputsDiv.classList.remove('hidden');
+            else if (selectedShape === 'circle') circleInputsDiv.classList.remove('hidden');
+            else if (selectedShape === 'ellipse') ellipseInputsDiv.classList.remove('hidden');
+            else if (selectedShape === 'custom') {
+                customInputsDiv.classList.remove('hidden');
+                if (customSidesContainer.children.length === 0) {
+                    addSideInput(); addSideInput(); addSideInput(); // Initial 3 sides for polygon
+                }
+            }
+            calculateMaterials();
+        }
+
+        function relabelCustomSides() {
+            const sideDivs = customSidesContainer.children;
+            for (let i = 0; i < sideDivs.length; i++) {
+                const label = sideDivs[i].querySelector('label');
+                if (label) label.textContent = `Lado ${i + 1} (m)`;
+            }
+        }
+
+        function addSideInput() {
+            const sideCount = customSidesContainer.children.length + 1;
+            const newSideDiv = document.createElement('div');
+            newSideDiv.className = 'flex items-end gap-2 bg-white p-2 border rounded-md shadow-sm';
+            newSideDiv.innerHTML = `
+                <div class="flex-grow">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">Lado ${sideCount} (m)</label>
+                    <input type="number" min="0" step="0.1" class="w-full p-2 bg-gray-50 border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none custom-side-input" value="1.0">
+                </div>
+                <button type="button" class="remove-side-btn bg-red-100 text-red-600 w-10 h-10 rounded hover:bg-red-200 flex items-center justify-center transition-colors">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+            `;
+            customSidesContainer.appendChild(newSideDiv);
+            
+            newSideDiv.querySelector('input').addEventListener('input', calculateMaterials);
+            newSideDiv.querySelector('.remove-side-btn').addEventListener('click', () => {
+                newSideDiv.remove();
+                relabelCustomSides();
+                calculateMaterials();
+            });
+        }
+
+        function calculateMaterials() {
+            const selectedShape = document.querySelector('input[name="shape"]:checked').value;
+            
+            const profileKey = profileTypeSelect.value;
+            const profileData = CATALOG[profileKey];
+            const profileBarLength = profileData.length;
+
+            let perimetro = 0, area = 0, lonaLinearDimension = 0, dimensionForRoll = 0, dimensionsText = '', shapeLabel = '';
+            const rawDimensions = {};
+
+            if (selectedShape === 'rectangle') {
+                const c = parseFloat(comprimentoInput.value) || 0;
+                const a = parseFloat(alturaInput.value) || 0;
+                rawDimensions.comprimento = c; rawDimensions.altura = a;
+                perimetro = (c + a) * 2; area = c * a; 
+                dimensionForRoll = a; // A Altura define exatamente qual rolo será usado
+                lonaLinearDimension = c; // O Comprimento define a metragem que será cobrada
+                dimensionsText = `${c}m x ${a}m`;
+                shapeLabel = c === a ? 'Quadrado' : 'Retângulo';
+            } else if (selectedShape === 'circle') {
+                const d = parseFloat(diametroInput.value) || 0;
+                rawDimensions.diametro = d;
+                perimetro = Math.PI * d; area = Math.PI * Math.pow(d / 2, 2); 
+                dimensionForRoll = d; lonaLinearDimension = d;
+                dimensionsText = `Ø ${d}m`; shapeLabel = 'Círculo';
+            } else if (selectedShape === 'ellipse') {
+                const eM = parseFloat(eixoMaiorInput.value) || 0;
+                const em = parseFloat(eixoMenorInput.value) || 0;
+                rawDimensions.eixoMaior = eM; rawDimensions.eixoMenor = em;
+                const a = eM / 2, b = em / 2;
+                perimetro = Math.PI * (3 * (a + b) - Math.sqrt((3 * a + b) * (a + 3 * b)));
+                area = Math.PI * a * b; 
+                dimensionForRoll = em; // O Eixo Menor (altura) define o rolo
+                lonaLinearDimension = eM; // O Eixo Maior (comprimento) define os metros cobrados
+                dimensionsText = `Eixos: ${eM}m / ${em}m`;
+                shapeLabel = 'Elipse';
+            } else if (selectedShape === 'custom') {
+                const sides = Array.from(document.querySelectorAll('.custom-side-input')).map(i => parseFloat(i.value) || 0);
+                rawDimensions.sides = sides;
+                perimetro = sides.reduce((s, c) => s + c, 0);
+                area = 0;
+                dimensionForRoll = Math.max(...sides, 0); // Aproximação segura
+                lonaLinearDimension = Math.max(...sides, 0); 
+                dimensionsText = `Lados: ${sides.join(', ')} (m)`;
+                shapeLabel = 'Irregular';
+            }
+
+            // Seleção automática da Lona
+            let lonaItem;
+            let warningHTML = '';
+            if (dimensionForRoll <= 1.80) {
+                lonaItem = CATALOG.lona180;
+            } else if (dimensionForRoll <= 2.80) {
+                lonaItem = CATALOG.lona280;
+            } else if (dimensionForRoll <= 5.80) {
+                lonaItem = CATALOG.lona580;
+            } else {
+                lonaItem = CATALOG.lona580; // Default para o máximo, mas com aviso
+                warningHTML = `<div class="col-span-2 bg-red-50 text-red-600 p-2 rounded text-xs font-bold text-center border border-red-200 mt-2">Atenção: A largura mínima (${dimensionForRoll.toFixed(2)}m) excede a maior lona disponível (5.80m). Será necessário costura/emenda!</div>`;
+            }
+
+            const qtdLona = Math.ceil(lonaLinearDimension);
+            const qtdSilicone = Math.ceil(perimetro);
+            const qtdPerfil = Math.ceil(perimetro / profileBarLength);
+
+            const resultsData = [
+                { title: lonaItem.title, desc: lonaItem.desc, code: lonaItem.code, unit: 'metros lineares', value: lonaLinearDimension, price: lonaItem.price, total: qtdLona * lonaItem.price, img: lonaItem.img },
+                { title: CATALOG.silicone.title, desc: CATALOG.silicone.desc, code: CATALOG.silicone.code, unit: 'metros', value: perimetro, price: CATALOG.silicone.price, total: qtdSilicone * CATALOG.silicone.price, img: CATALOG.silicone.img },
+                { title: profileData.title, desc: profileData.desc, code: profileData.code, unit: `barras de ${profileBarLength}m`, value: perimetro / profileBarLength, price: profileData.price, total: qtdPerfil * profileData.price, img: profileData.img }
+            ];
+            
+            lastCalculatedResults = {
+                shape: shapeLabel, dimensions: dimensionsText, rawDimensions, profile: `${profileData.title} (${profileBarLength}m)`,
+                materials: resultsData
+            };
+
+            // Render Output Cards
+            resultsDiv.innerHTML = '';
+            resultsData.forEach(item => {
+                let extraDetailHTML = `<p class="text-[10px] text-gray-400 mt-1" title="Valor exato calculado">${item.value.toFixed(2)} exato</p>`;
+
+                let imageOrIcon = item.img 
+                    ? `<img src="${item.img}" alt="${item.title}" class="h-10 w-full object-contain mb-2 rounded mix-blend-multiply">`
+                    : `<span class="text-gray-400 mb-2 flex justify-center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">${item.icon}</svg></span>`;
+                
+                let priceHTML = item.price > 0 
+                    ? `<div class="mt-2 pt-2 border-t border-gray-200 w-full text-center">
+                         <p class="text-[10px] text-gray-500">Custo (Base: Qtd. Inteira)</p>
+                         <p class="text-sm font-bold text-emerald-600">R$ ${item.total.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                       </div>`
+                    : `<div class="mt-2 pt-2 border-t border-gray-200 w-full text-center">
+                         <p class="text-[10px] text-gray-400">Preço não tabelado</p>
+                       </div>`;
+
+                let codeBadge = item.code !== '-' 
+                    ? `<div class="absolute -top-2 -right-2 bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm opacity-90">Cód: ${item.code}</div>` 
+                    : '';
+
+                resultsDiv.innerHTML += `
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col items-center justify-between text-center relative group shadow-sm hover:shadow-md transition-shadow">
+                        ${codeBadge}
+                        <div class="w-full flex-grow flex flex-col justify-center">
+                            ${imageOrIcon}
+                            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wide leading-tight mb-1" title="${item.desc}">${item.title}</h3> 
+                            <div class="flex items-baseline justify-center gap-1 mt-1">
+                                <span class="text-3xl font-extrabold text-blue-700 leading-none">${Math.ceil(item.value)}</span>
+                            </div>
+                            <p class="text-[11px] text-gray-500 font-medium mt-1 leading-tight">${item.unit}</p>
+                            ${extraDetailHTML}
+                        </div>
+                        ${priceHTML}
+                    </div>`;
+            });
+            
+            if (warningHTML) resultsDiv.innerHTML += warningHTML;
+        }
+
+        function addCurrentItemToProject() {
+            projectItems.push(JSON.parse(JSON.stringify(lastCalculatedResults)));
+            updateProjectUI();
+            showToast(`${lastCalculatedResults.shape} adicionado com sucesso!`);
+        }
+
+        function removeProjectItem(index) {
+            projectItems.splice(index, 1);
+            if (projectItems.length === 0) {
+                clearProject();
+            } else {
+                updateProjectUI();
+            }
+        }
+
+        function updateProjectUI() {
+            if (projectItems.length === 0) return;
+            
+            projectSection.classList.remove('hidden');
+            itemCountSpan.textContent = projectItems.length;
+            
+            // Render list
+            projectItemsList.innerHTML = '';
+            projectItems.forEach((item, index) => {
+                const li = document.createElement('div');
+                li.className = "bg-white p-3 rounded-lg border border-gray-200 flex justify-between items-center hover:border-blue-300 transition-colors group";
+                li.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">
+                            ${index + 1}
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800 text-sm">${item.shape}</p>
+                            <p class="text-xs text-gray-500">${item.dimensions}</p>
+                        </div>
+                    </div>
+                    <button class="text-gray-400 hover:text-red-500 p-2 rounded-md hover:bg-red-50 transition-colors" onclick="removeProjectItem(${index})" title="Remover item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                `;
+                projectItemsList.appendChild(li);
+            });
+
+            // Calculate and render totals
+            const totals = {};
+            let grandTotalCost = 0;
+            
+            projectItems.forEach(item => {
+                item.materials.forEach(mat => {
+                    const key = mat.code !== '-' ? mat.code : mat.title;
+                    if (!totals[key]) totals[key] = { title: mat.title, code: mat.code, unit: mat.unit, value: 0, price: mat.price, cost: 0 };
+                    totals[key].value += mat.value;
+                    if (mat.price) totals[key].cost += mat.total;
+                });
+            });
+
+            projectTotals.innerHTML = '';
+            for (const key in totals) {
+                const total = totals[key];
+                
+                let costHTML = total.price > 0 
+                    ? `<div class="text-sm text-yellow-200 font-bold mt-1 tracking-wide">R$ ${total.cost.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>`
+                    : ``;
+                
+                grandTotalCost += total.cost || 0;
+
+                projectTotals.innerHTML += `
+                    <div class="flex justify-between items-end border-b border-emerald-500/30 pb-3 pt-2">
+                        <div>
+                            <span class="text-sm font-bold text-white block">${total.title} ${total.code !== '-' ? `<span class="text-[10px] text-emerald-300 font-normal ml-1">(${total.code})</span>` : ''}</span>
+                            ${total.price > 0 ? `<span class="text-[10px] text-emerald-200 block mt-1">Unit: R$ ${total.price.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>` : ''}
+                        </div>
+                        <div class="text-right">
+                            <span class="font-extrabold text-xl text-white">${Math.ceil(total.value)}</span>
+                            <span class="text-xs text-emerald-200 ml-1">${total.unit.split(' ')[0]}</span>
+                            ${costHTML}
+                        </div>
+                    </div>
+                `;
+            }
+            projectTotals.innerHTML += `
+                <div class="flex justify-between items-center pt-4 mt-2 bg-emerald-800/40 p-3 rounded-lg border border-emerald-500/30">
+                    <span class="text-sm font-black text-white uppercase tracking-wider">Custo Total (Mat. Tabelados)</span>
+                    <span class="font-black text-2xl text-yellow-300">R$ ${grandTotalCost.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                </div>
+            `;
+        }
+
+        function clearProject() {
+            projectItems = [];
+            projectSection.classList.add('hidden');
+            projectItemsList.innerHTML = '';
+            projectTotals.innerHTML = '';
+            itemCountSpan.textContent = '0';
+        }
+
+        // --- PDF Generation Logic ---
+        function downloadProjectPDF() {
+            if(projectItems.length === 0) {
+                alert("Adicione pelo menos uma lona ao projeto antes de baixar o PDF.");
+                return;
+            }
+
+            const doc = new jsPDF();
+            const today = new Date().toLocaleDateString('pt-BR');
+            let lastY = 30;
+
+            // Cover/Header
+            doc.setFillColor(29, 78, 216); // blue-700
+            doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.text("Projeto de Lonas Tensionadas", 14, 25);
+            
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Data do Orçamento: ${today}`, 14, 33);
+            
+            // Representative Details
+            doc.setTextColor(50);
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("Detalhamento por Lona", 14, lastY + 20);
+            lastY += 25;
+
+            // Individual Items
+            projectItems.forEach((data, index) => {
+                if (lastY > 230) { doc.addPage(); lastY = 20; }
+                
+                doc.setFontSize(12); 
+                doc.setTextColor(29, 78, 216); // blue-700
+                doc.setFont("helvetica", "bold");
+                doc.text(`Item ${index + 1}: ${data.shape}`, 14, lastY);
+                
+                doc.autoTable({
+                    startY: lastY + 3,
+                    head: [['Dimensões', 'Tipo de Perfil Alumínio']],
+                    body: [[data.dimensions, data.profile]],
+                    theme: 'plain',
+                    headStyles: { fillColor: [243, 244, 246], textColor: [50, 50, 50], fontStyle: 'bold' },
+                    bodyStyles: { textColor: [80, 80, 80] },
+                    margin: { left: 14, right: 14 }
+                });
+                lastY = doc.autoTable.previous.finalY;
+
+                // Simple representative drawing for basic shapes
+                if (data.shape !== 'Irregular') {
+                    const drawStartY = lastY + 5;
+                    const drawAreaWidth = doc.internal.pageSize.width - 28;
+                    const drawCenterX = 14 + drawAreaWidth / 2;
+                    const drawMaxHeight = 35;
+                    let scale, w, h, x, y;
+
+                    doc.setLineWidth(0.4);
+                    doc.setDrawColor(150, 150, 150);
+                    doc.setFillColor(248, 250, 252); // slate-50
+                    doc.setFontSize(8);
+                    doc.setTextColor(100);
+
+                    if (data.shape === 'Retângulo' || data.shape === 'Quadrado') {
+                        const rawW = data.rawDimensions.comprimento;
+                        const rawH = data.rawDimensions.altura;
+                        if (rawW > 0 && rawH > 0) {
+                            scale = Math.min((drawAreaWidth / rawW) * 0.4, (drawMaxHeight / rawH) * 0.8);
+                            w = rawW * scale; h = rawH * scale;
+                            x = drawCenterX - w / 2; y = drawStartY;
+                            doc.rect(x, y, w, h, 'FD');
+                            doc.text(`${rawW}m`, x + w / 2, y + h + 5, { align: 'center' });
+                            doc.text(`${rawH}m`, x - 3, y + h / 2, { align: 'right', baseline: 'middle' });
+                        }
+                    } else if (data.shape === 'Círculo') {
+                        const rawD = data.rawDimensions.diametro;
+                        if (rawD > 0) {
+                            const r = (rawD / 2) * (Math.min(drawAreaWidth, drawMaxHeight) / rawD * 0.7);
+                            x = drawCenterX; y = drawStartY + r;
+                            doc.circle(x, y, r, 'FD');
+                            doc.line(x - r, y, x + r, y); // diameter line
+                            doc.text(`Ø ${rawD}m`, x, y - 2, { align: 'center' });
+                        }
+                    } else if (data.shape === 'Elipse') {
+                        const rawW = data.rawDimensions.eixoMaior;
+                        const rawH = data.rawDimensions.eixoMenor;
+                        if (rawW > 0 && rawH > 0) {
+                            scale = Math.min((drawAreaWidth / rawW) * 0.4, (drawMaxHeight / rawH) * 0.8);
+                            const rx = (rawW / 2) * scale; const ry = (rawH / 2) * scale;
+                            x = drawCenterX; y = drawStartY + ry;
+                            doc.ellipse(x, y, rx, ry, 'FD');
+                            doc.text(`Eixo M: ${rawW}m`, x, y - ry - 2, { align: 'center' });
+                        }
+                    }
+                    lastY = drawStartY + drawMaxHeight + 5;
+                } else {
+                    lastY += 5;
+                }
+                
+                const tableBody = data.materials.map(item => {
+                    let unitText = item.unit;
+                    let priceStr = item.price > 0 ? `R$ ${item.price.toLocaleString('pt-BR', {minimumFractionDigits: 2})}` : '-';
+                    let totalStr = item.price > 0 ? `R$ ${item.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}` : '-';
+                    return [item.code, item.title, Math.ceil(item.value), unitText, priceStr, totalStr];
+                });
+
+                doc.autoTable({
+                    startY: lastY + 2,
+                    head: [['Cód.', 'Material Necessário', 'Qtd', 'Unid.', 'Preço Un.', 'Subtotal']],
+                    body: tableBody,
+                    theme: 'grid',
+                    styles: { fontSize: 8, cellPadding: 3 },
+                    headStyles: { fillColor: [241, 245, 249], textColor: [51, 65, 85] },
+                    alternateRowStyles: { fillColor: [250, 250, 250] },
+                    margin: { left: 14, right: 14 },
+                    columnStyles: { 0: { cellWidth: 20 }, 2: { halign: 'center' }, 4: { halign: 'right' }, 5: { halign: 'right' } }
+                });
+                lastY = doc.autoTable.previous.finalY + 15;
+            });
+
+            // --- TOTALS SECTION ---
+            doc.addPage();
+            lastY = 30;
+            
+            // Header for totals page
+            doc.setFillColor(16, 185, 129); // emerald-500
+            doc.rect(0, 0, 210, 20, 'F');
+            doc.setTextColor(255);
+            doc.setFontSize(16);
+            doc.setFont("helvetica", "bold");
+            doc.text("Resumo Geral e Custos do Projeto", 14, 13);
+            
+            const totalTableBody = [];
+            const totals = {};
+            let grandTotalCost = 0;
+            
+             projectItems.forEach(item => {
+                item.materials.forEach(mat => {
+                    const key = mat.code !== '-' ? mat.code : mat.title;
+                    if (!totals[key]) totals[key] = { title: mat.title, code: mat.code, unit: mat.unit, value: 0, price: mat.price, cost: 0 };
+                    totals[key].value += mat.value;
+                    if (mat.price) totals[key].cost += mat.total;
+                });
+            });
+            
+            for (const key in totals) {
+                 const total = totals[key];
+                 let unitText = total.unit;
+                 let priceStr = total.price > 0 ? `R$ ${total.price.toLocaleString('pt-BR', {minimumFractionDigits: 2})}` : '-';
+                 let costStr = total.cost > 0 ? `R$ ${total.cost.toLocaleString('pt-BR', {minimumFractionDigits: 2})}` : '-';
+                 
+                 grandTotalCost += total.cost || 0;
+                 totalTableBody.push([total.code, total.title, Math.ceil(total.value), unitText, priceStr, costStr]);
+            }
+            
+            totalTableBody.push([
+                { content: "CUSTO TOTAL (MATERIAIS TABELADOS)", colSpan: 5, styles: { fontStyle: 'bold', halign: 'right', fillColor: [240, 253, 244] } }, 
+                { content: `R$ ${grandTotalCost.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, styles: { fontStyle: 'bold', textColor: [16, 185, 129], fillColor: [240, 253, 244], halign: 'right' } }
+            ]);
+
+            doc.autoTable({
+                startY: lastY,
+                head: [['Cód.', 'Material Consolidado', 'Qtd Total', 'Unidade', 'Preço Un.', 'Custo Total']],
+                body: totalTableBody,
+                theme: 'grid',
+                headStyles: { fillColor: [16, 185, 129], textColor: 255, fontSize: 10 },
+                bodyStyles: { fontSize: 9, cellPadding: 4 },
+                alternateRowStyles: { fillColor: [240, 253, 244] }, // light emerald
+                margin: { left: 14, right: 14 },
+                columnStyles: { 0: { cellWidth: 15 }, 2: { halign: 'center' }, 4: { halign: 'right' }, 5: { halign: 'right' } }
+            });
+
+            // Add Footer to all pages
+            const pageCount = doc.internal.getNumberOfPages();
+            doc.setFontSize(9); 
+            doc.setTextColor(150);
+            for(let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.text("Calculadora de Lona Tensionada Iluminada", 14, doc.internal.pageSize.height - 10);
+                doc.text("Marcio Marques | (81) 9.9464-5392", doc.internal.pageSize.width - 14, doc.internal.pageSize.height - 10, { align: 'right' });
+                doc.text(`Pág ${i} de ${pageCount}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
+            }
+
+            doc.save(`Projeto_Lonas_${new Date().getTime()}.pdf`);
+        }
+        
+        // --- Event Listeners ---
+        const allInputs = [comprimentoInput, alturaInput, diametroInput, eixoMaiorInput, eixoMenorInput, profileTypeSelect];
+        allInputs.forEach(input => input.addEventListener('input', calculateMaterials));
+        shapeRadios.forEach(radio => radio.addEventListener('change', handleShapeChange));
+        downloadPdfBtn.addEventListener('click', downloadProjectPDF);
+        addToProjectBtn.addEventListener('click', addCurrentItemToProject);
+        clearProjectBtn.addEventListener('click', clearProject);
+        addSideBtn.addEventListener('click', addSideInput);
+
+        // --- Initial Setup ---
+        window.addEventListener('load', () => {
+            handleShapeChange();
+        });
+
+    </script>
+</body>
+</html>
